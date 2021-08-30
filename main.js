@@ -67,11 +67,13 @@ function populate() {
 
     const gameName = gamesList[i].name;
     const gameTime = gamesList[i].hours_forever;
+    const gameLogo = gamesList[i].logo;
     
     var table = document.getElementById('gameTable');
     var row = table.insertRow();
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
 
     cell1.innerHTML = gameName;
 
@@ -81,6 +83,7 @@ function populate() {
     else {
         cell2.innerHTML = 'Not played';
         }
+    cell3.innerHTML = `<img src = ${ gameLogo }>`;
     }
 };
 
