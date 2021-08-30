@@ -2,3 +2,4 @@ node_modules
 dist
 steamStuff.js
 populate.js
+gamesList.js
