@@ -24,6 +24,21 @@ button {
     border-radius: 5px;
 }
 
+#nameHeader, #playtimeHeader {
+    cursor: pointer;
+    user-select: none;
+}
+
+#nameHeader:hover, #playtimeHeader:hover {
+    background-color: #222;
+}
+
+#sortArrow {
+    font-size: 1.6em;
+    color: white;
+    vertical-align: middle;
+}
+
 #randombox {
     background-color: chartreuse;
     color: black;

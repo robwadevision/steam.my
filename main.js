@@ -1,4 +1,6 @@
 let gamesList = [];
+let sortCol = 'name';
+let sortDir = 'asc';
 
 async function loadGames() {
   const status = document.getElementById('status');
@@ -15,12 +17,32 @@ async function loadGames() {
   populate();
 }
 
+function setSort(col) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = col === 'playtime' ? 'desc' : 'asc';
+  }
+  document.getElementById('nameArrow').textContent = sortCol === 'name' ? (sortDir === 'asc' ? '↑' : '↓') : '↕';
+  document.getElementById('sortArrow').textContent = sortCol === 'playtime' ? (sortDir === 'asc' ? '↑' : '↓') : '↕';
+  populate();
+}
+
 function populate() {
+  const sorted = [...gamesList];
+  if (sortCol === 'playtime') {
+    const dir = sortDir === 'desc' ? -1 : 1;
+    sorted.sort((a, b) => dir * ((parseFloat(a.hours) || 0) - (parseFloat(b.hours) || 0)));
+  } else {
+    const dir = sortDir === 'desc' ? -1 : 1;
+    sorted.sort((a, b) => dir * a.name.localeCompare(b.name));
+  }
+
   const table = document.getElementById('gameTable');
-  // Clear existing rows except header
   while (table.rows.length > 1) table.deleteRow(1);
 
-  for (const game of gamesList) {
+  for (const game of sorted) {
     const row = table.insertRow();
     row.insertCell(0).textContent = game.name;
     row.insertCell(1).textContent = game.hours !== null ? `${game.hours}h` : 'Not played';
