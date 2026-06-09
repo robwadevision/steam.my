@@ -9,6 +9,8 @@ export default async function handler(req, res) {
 
   const response = await fetch(url);
   if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    console.error('Steam API error', response.status, body.slice(0, 300));
     return res.status(502).json({ error: 'Steam API request failed', status: response.status });
   }
 
