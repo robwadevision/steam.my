@@ -1,3 +1,2 @@
-steamStuff.js
-populate.js
-gamesList.js
+.env.local
+.env*.local
