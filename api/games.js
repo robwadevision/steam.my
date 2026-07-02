@@ -25,6 +25,11 @@ export default async function handler(req, res) {
 
   games.sort((a, b) => a.name.localeCompare(b.name));
 
+  const { letter } = req.query;
+  const filtered = letter && /^[a-zA-Z]$/.test(letter)
+    ? games.filter(g => g.name.toUpperCase().startsWith(letter.toUpperCase()))
+    : games;
+
   res.setHeader('Cache-Control', 's-maxage=300');
-  res.status(200).json(games);
+  res.status(200).json(filtered);
 }

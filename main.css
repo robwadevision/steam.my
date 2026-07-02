@@ -24,6 +24,21 @@ button {
     border-radius: 5px;
 }
 
+label {
+    color: white;
+    margin-right: 6px;
+}
+
+select#letterFilter {
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
 #nameHeader, #playtimeHeader {
     cursor: pointer;
     user-select: none;

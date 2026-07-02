@@ -14,6 +14,7 @@ async function loadGames() {
 
   gamesList = await res.json();
   status.textContent = `${gamesList.length} games loaded.`;
+  populateLetterFilter();
   populate();
 }
 
@@ -50,13 +51,44 @@ function populate() {
   }
 }
 
-function pickMeOne() {
+function populateLetterFilter() {
   const unplayed = gamesList.filter(g => g.hours === null);
-  if (unplayed.length === 0) {
-    document.getElementById('randombox').textContent = 'You\'ve played everything!';
+  const letters = [...new Set(
+    unplayed.map(g => {
+      const first = g.name[0]?.toUpperCase();
+      return /[A-Z]/.test(first) ? first : '#';
+    })
+  )].sort();
+
+  const select = document.getElementById('letterFilter');
+  // Remove old letter options (keep "Any" and "#")
+  [...select.options].forEach(o => { if (o.value.length === 1 && /[A-Z]/.test(o.value)) o.remove(); });
+
+  letters.filter(l => l !== '#').forEach(letter => {
+    const opt = document.createElement('option');
+    opt.value = letter;
+    opt.textContent = letter;
+    select.appendChild(opt);
+  });
+}
+
+function pickMeOne() {
+  const letter = document.getElementById('letterFilter').value;
+  let pool = gamesList.filter(g => g.hours === null);
+
+  if (letter === '#') {
+    pool = pool.filter(g => !/^[A-Za-z]/.test(g.name));
+  } else if (letter) {
+    pool = pool.filter(g => g.name.toUpperCase().startsWith(letter));
+  }
+
+  if (pool.length === 0) {
+    document.getElementById('randombox').textContent = letter
+      ? `No unplayed games starting with "${letter}".`
+      : 'You\'ve played everything!';
     return;
   }
-  const pick = unplayed[Math.floor(Math.random() * unplayed.length)];
+  const pick = pool[Math.floor(Math.random() * pool.length)];
   document.getElementById('randombox').textContent = pick.name;
 }
 
