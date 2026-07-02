@@ -72,9 +72,8 @@ function populateLetterFilter() {
   });
 }
 
-function pickMeOne() {
+function pickFrom(pool, emptyMessage) {
   const letter = document.getElementById('letterFilter').value;
-  let pool = gamesList.filter(g => g.hours === null);
 
   if (letter === '#') {
     pool = pool.filter(g => !/^[A-Za-z]/.test(g.name));
@@ -82,14 +81,21 @@ function pickMeOne() {
     pool = pool.filter(g => g.name.toUpperCase().startsWith(letter));
   }
 
-  if (pool.length === 0) {
-    document.getElementById('randombox').textContent = letter
-      ? `No unplayed games starting with "${letter}".`
-      : 'You\'ve played everything!';
-    return;
-  }
-  const pick = pool[Math.floor(Math.random() * pool.length)];
-  document.getElementById('randombox').textContent = pick.name;
+  document.getElementById('randombox').textContent = pool.length === 0
+    ? emptyMessage
+    : pool[Math.floor(Math.random() * pool.length)].name;
+}
+
+function pickRandom() {
+  const letter = document.getElementById('letterFilter').value;
+  const noGamesMsg = letter ? `No games starting with "${letter}".` : 'No games in your library.';
+  pickFrom([...gamesList], noGamesMsg);
+}
+
+function pickUnplayed() {
+  const letter = document.getElementById('letterFilter').value;
+  const noGamesMsg = letter ? `No unplayed games starting with "${letter}".` : 'You\'ve played everything!';
+  pickFrom(gamesList.filter(g => g.hours === null), noGamesMsg);
 }
 
 document.addEventListener('DOMContentLoaded', loadGames);
